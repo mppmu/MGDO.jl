@@ -1,1 +1,1 @@
-# MGDO
+# MGDO.jl
