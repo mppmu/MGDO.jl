@@ -5,6 +5,7 @@ __precompile__(false)
 module MGDO
 
 include.([
+    "load_deps.jl",
 ])
 
 end # module
