@@ -20,23 +20,35 @@ type JlMGVDigitizerData
     bit_resolution::Vector{Int}
 end
 
-function JlMGVDigitizerData(digitizer_data::pcpp"MGTClonesArray")
+JlMGVDigitizerData() = JlMGVDigitizerData(
+    Vector{Int}(),
+    Vector{UInt64}(),
+    Vector{Int}(),
+    Vector{Float64}(),
+    Vector{Int}()
+)
+
+
+function Base.copy!(jl_digitizer_data::JlMGVDigitizerData, digitizer_data::pcpp"MGTClonesArray")
     n = (digitizer_data == C_NULL) ? zero(Int) : Int(@cxx digitizer_data->GetEntriesFast())
 
-    ch = Vector{Int}(n)
-    timestamp = Vector{UInt64}(n)
-    index = Vector{Int}(n)
-    energy = Vector{Float64}(n)
-    bit_resolution = Vector{Int}(n)
+    resize!(jl_digitizer_data.ch, 0)
+    resize!(jl_digitizer_data.timestamp, 0)
+    resize!(jl_digitizer_data.index, 0)
+    resize!(jl_digitizer_data.energy, 0)
+    resize!(jl_digitizer_data.bit_resolution, 0)
 
     for i in 1:n
         data = icxx"dynamic_cast<MGVDigitizerData*>($digitizer_data->At($i - 1));"
-        ch[i] = @cxx data->GetID()
-        timestamp[i] = @cxx data->GetTimeStamp()
-        index[i] = @cxx data->GetIndex()
-        energy[i] = @cxx data->GetEnergy()
-        bit_resolution[i] = @cxx data->GetBitResolution()
+        push!(jl_digitizer_data.ch, @cxx data->GetID())
+        push!(jl_digitizer_data.timestamp, @cxx data->GetTimeStamp())
+        push!(jl_digitizer_data.index, @cxx data->GetIndex())
+        push!(jl_digitizer_data.energy, @cxx data->GetEnergy())
+        push!(jl_digitizer_data.bit_resolution, @cxx data->GetBitResolution())
     end
-
-    JlMGVDigitizerData(ch, timestamp, index, energy, bit_resolution)
+    jl_digitizer_data
 end
+
+
+Base.convert(::Type{JlMGVDigitizerData}, digitizer_data::pcpp"MGTClonesArray") =
+    copy!(JlMGVDigitizerData(), digitizer_data)
