@@ -18,8 +18,16 @@ function Base.open{T}(::Type{MGTEventTree{T}}, filename::AbstractString; treenam
         icxx"new TChain($treename);"
     end
     event = Ref(icxx"(MGTEvent*)(nullptr);")
+
     @cxx tchain->AddFile(pointer(filename))
+
+    @cxx tchain->SetCacheSize(-1);
+    @cxx tchain->SetBranchStatus(pointer("*"), false);
+
+    @cxx tchain->SetBranchStatus(pointer(branchname), true);
+    @cxx tchain->AddBranchToCache(pointer(branchname), true);
     @cxx tchain->SetBranchAddress(pointer(branchname), icxx"&$(event);")
+
     result = MGTEventTree{T}(tchain, event)
     finalizer(result, close)
     result
