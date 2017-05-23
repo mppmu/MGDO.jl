@@ -26,6 +26,7 @@ function _init_root()
     Libdl.dlopen(joinpath(libdir, "libTree.so"), Libdl.RTLD_GLOBAL)
 
     cxxinclude("TSystem.h")
+    cxxinclude("TROOT.h")
     cxxinclude("TThread.h")
 end
 
@@ -34,9 +35,6 @@ _init_root()
 
 # Enable thread-safety for ROOT:
 icxx"TThread::Initialize();"
-
-# Lock for non-threadsafe ROOT operations:
-const _root_thread_lock = Base.Threads.Mutex()
 
 
 const mgdo_libdir = dirname(MGDO.libMGDOBase)
