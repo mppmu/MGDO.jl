@@ -14,11 +14,8 @@ end
 
 
 function Base.open{T}(::Type{MGTEventTree{T}}, filename::AbstractString; treename::AbstractString = "MGTree", branchname::AbstractString = "event")
-    icxx"gROOTMutex->Lock();"
-    tchain = try
+    tchain = lock(gROOTMutex()) do
         icxx"new TChain($treename);"
-    finally
-        icxx"gROOTMutex->UnLock();"
     end
 
     event = Ref(icxx"(MGTEvent*)(nullptr);")
@@ -53,11 +50,8 @@ end
 
 function Base.close(evttree::MGTEventTree)
     if evttree.tchain != C_NULL
-        icxx"gROOTMutex->Lock();"
-        try
+        lock(gROOTMutex()) do
             icxx"delete $(evttree.tchain);"
-        finally
-            icxx"gROOTMutex->UnLock();"
         end
         evttree.tchain = icxx"(TChain*)(nullptr);"
     end
