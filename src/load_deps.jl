@@ -8,7 +8,7 @@ else
 end
 
 
-using Cxx
+using ROOT, Cxx
 
 
 function _init_clhep()
@@ -17,24 +17,6 @@ function _init_clhep()
     foreach(d -> addHeaderDir(d, kind=C_System), includedirs)
 end
 _init_clhep()
-
-
-function _init_root()
-    incdir = strip(readstring(`root-config --incdir`))
-    libdir = strip(readstring(`root-config --libdir`))
-    addHeaderDir(incdir, kind=C_System)
-    Libdl.dlopen(joinpath(libdir, "libTree.so"), Libdl.RTLD_GLOBAL)
-
-    cxxinclude("TSystem.h")
-    cxxinclude("TROOT.h")
-    cxxinclude("TThread.h")
-end
-
-_init_root()
-
-
-# Enable thread-safety for ROOT:
-icxx"TThread::Initialize();"
 
 
 const mgdo_libdir = dirname(MGDO.libMGDOBase)
