@@ -1,12 +1,5 @@
 # MGDO.jl
 
-## Julia dependencies
-
-MGDO.jl requires [Cxx.jl](https://github.com/Keno/Cxx.jl). As it is not
-uncommon for Cxx to be installed as a site-wide package, the requirement is
-not made explicit (not stated in `REQUIRE`).
-
-
 ## Non-Julia dependencies
 
 During `Pkg.build("MGDO")` MGDO.jl will automatically download and install a
