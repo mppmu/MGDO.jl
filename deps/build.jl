@@ -6,9 +6,6 @@ mgdo_version = "f3b2f109"
 
 libMGDOBase = library_dependency("libMGDOBase", aliases=[])
 
-info(BinDeps._find_library(libMGDOBase))
-info(BinDeps.issatisfied(libMGDOBase))
-
 prefix = joinpath(BinDeps.depsdir(libMGDOBase), "usr")
 srcdir = BinDeps.srcdir(libMGDOBase)
 mgdo_srcdir = joinpath(srcdir, "MGDO")
