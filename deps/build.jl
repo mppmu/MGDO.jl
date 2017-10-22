@@ -13,7 +13,7 @@ prefix = joinpath(BinDeps.depsdir(libMGDOBase), "usr")
 srcdir = BinDeps.srcdir(libMGDOBase)
 mgdo_srcdir = joinpath(srcdir, "MGDO")
 
-if is_linux()
+if Sys.is_linux()
     ldflags="-Wl,-rpath,'\$\$ORIGIN' -Wl,-z,origin"
 else
     ldflags=""
@@ -22,7 +22,7 @@ end
 
 # BSD systems (other than macOS) use BSD Make rather than GNU Make by default
 # We need GNU Make, and on such systems GNU make is invoked as `gmake`
-make = is_bsd() && !is_apple() ? "gmake" : "make"
+make = Sys.is_bsd() && !Sys.is_apple() ? "gmake" : "make"
 
 provides(SimpleBuild,
     (@build_steps begin
