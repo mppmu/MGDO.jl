@@ -4,12 +4,10 @@ __precompile__(false)
 
 module MGDO
 
-include.([
-    "load_deps.jl",
-    "mgtwaveform.jl",
-    "mgvdigitizerdata.jl",
-    "mgtevent.jl",
-    "mgteventtree.jl",
-])
+include("load_deps.jl")
+include("mgtwaveform.jl")
+include("mgvdigitizerdata.jl")
+include("mgtevent.jl")
+include("mgteventtree.jl")
 
 end # module
